@@ -1712,6 +1712,16 @@
         "build": {
           "build/netcoreapp3.1/xunit.runner.visualstudio.props": {}
         }
+      },
+      "CheckoutKata/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/CheckoutKata.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CheckoutKata.dll": {}
+        }
       }
     }
   },
@@ -5433,10 +5443,16 @@
         "xunit.runner.visualstudio.2.4.5.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "CheckoutKata/1.0.0": {
+      "type": "project",
+      "path": "../CheckoutKata/CheckoutKata.csproj",
+      "msbuildProject": "../CheckoutKata/CheckoutKata.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "CheckoutKata >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.5.0",
       "coverlet.collector >= 3.2.0",
       "xunit >= 2.4.2",
@@ -5471,7 +5487,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/Users/gunjanbansal/Projects/InterviewKata/CheckoutKata/CheckoutKata.csproj": {
+              "projectPath": "/Users/gunjanbansal/Projects/InterviewKata/CheckoutKata/CheckoutKata.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
