@@ -2,17 +2,16 @@ namespace CheckoutKata;
 
 public class PricingRule
 {
-    public string Item { get; set; }
-    public int UnitPrice { get; set; }
-    public int Bundle_Quantity { get; set; }
-    public int Bundle_Price { get; set; }
-    
+    public string Item { get; }
+    public int UnitPrice { get; }
+    public int BundleQuantity { get; }
+    public int BundlePrice { get; }
 
-    public PricingRule(string item, int unitprice, int quantity, int price)
+    public PricingRule(string item, int unitPrice, int bundleQuantity, int bundlePrice)
     {
         Item = item;
-        UnitPrice = unitprice;
-        Bundle_Quantity = quantity;
-        Bundle_Price = price;
+        UnitPrice = unitPrice;
+        BundleQuantity = bundleQuantity;
+        BundlePrice = bundlePrice;
     }
 }

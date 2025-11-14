@@ -1,39 +1,32 @@
 namespace CheckoutKata;
 
-public sealed class Checkout : ICheckout
+public class Checkout : ICheckout
 {
-    public Checkout(List<PricingRule> pricingRules)
-    {  
-        PricingRules.Instance.Add(pricingRules);    
+    private readonly IPriceCalculator _priceCalculator;
+    private readonly Dictionary<string, int> _scannedItems = new();
+
+    public Checkout(IPriceCalculator priceCalculator)
+    {
+        _priceCalculator = priceCalculator;
     }
-    private readonly PriceCalculator priceCalculator = PriceCalculator.Instance;
-    private readonly Dictionary<string, int> totalItems = new();
 
     public void Scan(string item)
     {
-        if (totalItems.ContainsKey(item))
-        {
-            totalItems[item]++;
-        }
+        if (_scannedItems.ContainsKey(item))
+            _scannedItems[item]++;
         else
-        {
-            totalItems[item] = 1;
-        }
+            _scannedItems[item] = 1;
     }
 
     public int GetTotalPrice()
     {
-        var total = 0;
-
-        foreach (var kvp in totalItems)
+        int total = 0;
+        foreach (var kvp in _scannedItems)
         {
-            var item = kvp.Key;
-            var quantity = kvp.Value;
-
-            total += priceCalculator.CalculateTotalItemPrice(item, quantity);
-            Console.WriteLine($"Item: {item}, Quantity: {quantity}, Subtotal: {total}");
+            var itemTotal = _priceCalculator.CalculateTotalItemPrice(kvp.Key, kvp.Value);
+            total += itemTotal;
+            Console.WriteLine($"Item: {kvp.Key}, Quantity: {kvp.Value}, Subtotal: {itemTotal}");
         }
-
         return total;
     }
 }

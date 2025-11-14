@@ -1,31 +1,36 @@
 namespace CheckoutKata;
 
-public sealed class PriceCalculator
+public class PriceCalculator : IPriceCalculator
 {
-    private static readonly PriceCalculator instance = new();
-    private readonly PricingRules pricingRules = PricingRules.Instance;
+    private readonly Dictionary<string, PricingRule> _pricingRules;
+
+    public PriceCalculator(IEnumerable<PricingRule> rules)
+    {
+        _pricingRules = new Dictionary<string, PricingRule>();
+        foreach (var rule in rules)
+        {
+            _pricingRules[rule.Item] = rule;
+        }
+    }
 
     public int CalculateTotalItemPrice(string item, int quantity)
     {
+        if (!_pricingRules.ContainsKey(item))
+            throw new InvalidOperationException($"No pricing rule found for item '{item}'.");
+
+        var rule = _pricingRules[item];
         int totalPrice = 0;
-        if (quantity <= 0) return 0;
-        while (quantity >= pricingRules.BundleQuantity[item])
+
+        // Apply bundle pricing
+        while (quantity >= rule.BundleQuantity && rule.BundleQuantity > 0)
         {
-            totalPrice += pricingRules.BundlePrice[item];
-            quantity -= pricingRules.BundleQuantity[item];
+            totalPrice += rule.BundlePrice;
+            quantity -= rule.BundleQuantity;
         }
-        while(quantity > 0)
-        {
-            totalPrice += pricingRules.UnitPrice[item];
-            quantity--;
-        }
+
+        // Apply unit pricing
+        totalPrice += quantity * rule.UnitPrice;
+
         return totalPrice;
-    }
-
-    private PriceCalculator() { }
-
-    public static PriceCalculator Instance
-    {
-        get { return instance; }
     }
 }
